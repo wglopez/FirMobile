@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetalleDocumento">
+
+    <ImageView
+        android:id="@+id/imagenDocumento"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/doc_icon"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleName"
+        android:text="@string/nameDocument"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imagenDocumento"
+        android:layout_marginTop="50dp"
+        ></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameDocument"
+        android:text="prueba.doc"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/titleName"
+        android:layout_marginTop="10dp"
+        ></TextView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleDirection"
+        android:text="@string/direccion"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/nameDocument"
+        android:layout_marginTop="10dp"
+        ></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/directionDocument"
+        android:text="directorioPrueba/prueba.doc"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/titleDirection"
+        android:layout_marginTop="10dp"
+        ></TextView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleFormat"
+        android:text="@string/format"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/directionDocument"
+        android:layout_marginTop="10dp"
+        ></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/formatoDocumento"
+        android:text="Doc"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/titleFormat"
+        android:layout_marginTop="10dp"
+        ></TextView>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight=".2"
+        android:layout_alignParentBottom="true"
+        >
+
+
+        <Button
+            android:id="@+id/btnFirmar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_weight=".2"
+            android:backgroundTint="#00BCD4"
+            android:text="Firmar"
+            ></Button>
+
+        <Button
+            android:id="@+id/btnBorrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_weight=".2"
+            android:backgroundTint="#00BCD4"
+            android:text="Borrar"></Button>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
