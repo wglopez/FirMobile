@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">FirMobile</string>
+
+    <string name="nameDocument"><u>Nombre del Documento</u></string>
+    <string name="direccion"><u>Direccion</u></string>
+    <string name="format"><u>Formato</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
