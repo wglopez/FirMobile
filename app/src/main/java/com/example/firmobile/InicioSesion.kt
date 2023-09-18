@@ -1,14 +1,12 @@
 package com.example.firmobile
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
@@ -22,7 +20,7 @@ class InicioSesion : Fragment(){
     private var botonClickListener: OnBotonClickListener? = null
     lateinit var cuilView: TextView
     lateinit var btnInicioSesion: Button
-    var CUIL:String=""
+    var cuil:String=""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,21 +37,19 @@ class InicioSesion : Fragment(){
         cuilView= rootView.findViewById(R.id.CUIL)
         btnInicioSesion= rootView.findViewById(R.id.btnIniciarSesion)
         btnInicioSesion.setOnClickListener{
-            CUIL = cuilView.text.toString()
+            cuil = cuilView.text.toString()
 
-            if (esCUILValido(CUIL)){
-                botonClickListener?.onBotonClick(CUIL)
+            if (esCUILValido(cuil)){
+                botonClickListener?.onBotonClick(cuil)
             }
             else{
                 Toast.makeText(activity, "CUIL Invalido", Toast.LENGTH_LONG).show()
             }
 
         }
-
         // Inflate the layout for this fragment
         return rootView
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
