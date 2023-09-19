@@ -18,9 +18,9 @@ class InicioSesion : Fragment(){
     }
 
     private var botonClickListener: OnBotonClickListener? = null
-    lateinit var cuilView: TextView
-    lateinit var btnInicioSesion: Button
-    var cuil:String=""
+    private lateinit var cuilView: TextView
+    private lateinit var btnInicioSesion: Button
+    private var cuil:String=""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

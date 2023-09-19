@@ -41,7 +41,7 @@
                 ></Button>
 
             <Button
-                android:id="@+id/btnCerrar"
+                android:id="@+id/btnCerrarSesion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

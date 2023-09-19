@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
 
         val CUIL= inicioSesion.arguments?.getInt("CUIL")
 
+
     }
 
     fun replaceFragment(fragment: Fragment){
