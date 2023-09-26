@@ -23,6 +23,7 @@ class InicioSesion : Fragment(){
     private var cuil:String=""
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -40,6 +41,7 @@ class InicioSesion : Fragment(){
             cuil = cuilView.text.toString()
 
             if (esCUILValido(cuil)){
+
                 botonClickListener?.onBotonClick(cuil)
             }
             else{

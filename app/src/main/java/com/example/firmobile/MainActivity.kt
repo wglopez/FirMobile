@@ -1,7 +1,6 @@
 package com.example.firmobile
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -9,6 +8,8 @@ import androidx.fragment.app.commit
 class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
     val inicioSesion: InicioSesion = InicioSesion()
     val listaDocumentos: ListaDocumentos=ListaDocumentos()
+    var idUsuarioActual:Int=0
+    val administradorDB=AdministradorDB(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,11 @@ class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
     }
 
 
-    override fun onBotonClick(data: String) {
+    override fun onBotonClick(cuil: String) {
+        idUsuarioActual=administradorDB.insertUser(cuil)
+        var datos=Bundle()
+        datos.putInt("usuario_id", idUsuarioActual)
+        listaDocumentos.arguments=datos
         replaceFragment(listaDocumentos)
 
     }
