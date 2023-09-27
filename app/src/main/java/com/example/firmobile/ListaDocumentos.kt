@@ -40,9 +40,9 @@ class ListaDocumentos : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootView= inflater.inflate(R.layout.fragment_lista_documentos, container, false)
-        val idUsuario= arguments?.getInt("usuario_id")
+        val cuilUsuario= requireArguments().getString("cuilUsuario")
         administradorDB=AdministradorDB(requireContext())
-        listaDocumentos = administradorDB.getAllDocuments(idUsuario) ?: ArrayList()
+        listaDocumentos = administradorDB.getAllDocuments(cuilUsuario.toString()) ?: ArrayList()
 
 
         btnAgregar=rootView.findViewById(R.id.btnAgregar)
@@ -72,7 +72,9 @@ class ListaDocumentos : Fragment() {
             if(esValido(fileExtension)){
                 val image=getImage(fileExtension)
                 val document=Documento(fileName, filePath.toString(), fileExtension,image)
-                arguments?.let { administradorDB.insertDocumento(document, it.getInt("usuario_id")) }
+
+                administradorDB.insertDocumento(document, arguments?.getString("cuilUsuario"))
+
                 listaDocumentos.add(document)
 
                 adaptador.notifyDataSetChanged()

@@ -16,9 +16,7 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     override fun onCreate(db: SQLiteDatabase) {
         // Crear la estructura de la base de datos
         db.execSQL(
-            "CREATE TABLE Usuarios (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "CUIL TEXT) "
+            "CREATE TABLE Usuarios (CUIL TEXT PRIMARY KEY ) "
         )
 
         db.execSQL(
@@ -27,8 +25,8 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                     "nombre TEXT, " +
                     "direccion TEXT, " +
                     "tipo TEXT, " +
-                    "usuario_id INTEGER," +
-                    "FOREIGN KEY (usuario_id) REFERENCES Usuarios (id))"
+                    "cuilUsuario TEXT," +
+                    "FOREIGN KEY (cuilUsuario) REFERENCES Usuarios (CUIL))"
         )
     }
 
@@ -44,22 +42,22 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
 
-    fun insertUser(cuil:String):Int{
-        return writableDatabase.use { db ->
+    fun insertUser(cuil:String){
+        writableDatabase.use { db ->
             val registro = ContentValues()
             registro.put("CUIL", cuil)
             db.insert("Usuarios", null, registro).toInt()
         }
     }
 
-    fun insertDocumento(name:String, direction: String, type:String, idUsuario: Int) {
+    fun insertDocumento(name:String, direction: String, type:String, cuilUsuario: String?) {
         try {
             val db = writableDatabase
             val registro = ContentValues()
             registro.put("nombre", name)
             registro.put("direccion", direction)
             registro.put("tipo",type)
-            registro.put("usuario_id",idUsuario)
+            registro.put("cuilUsuario",cuilUsuario)
             db.insert("Documentos", null, registro)
             db.close()
         } catch (e: Exception) {
@@ -67,8 +65,8 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         }
     }
 
-    fun insertDocumento(documento: Documento, idUsuario:Int) {
-        insertDocumento(documento.name, documento.direction, documento.type, idUsuario)
+    fun insertDocumento(documento: Documento, cuilUsuario: String?) {
+        insertDocumento(documento.name, documento.direction, documento.type, cuilUsuario)
     }
 
 
@@ -79,9 +77,9 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
 
-    fun getAllDocuments(idUsuario: Int?): ArrayList<Documento>? {
+    fun getAllDocuments(cuilUsuario: String): ArrayList<Documento>? {
         val db = writableDatabase
-        val cursor = db.rawQuery(" SELECT * FROM Documentos " + "WHERE usuario_id="+idUsuario, null)
+        val cursor = db.rawQuery(" SELECT * FROM Documentos " + "WHERE cuilUsuario="+cuilUsuario, null)
         var listaDocumentos= ArrayList<Documento>()
         var document: Documento
         var name: String
