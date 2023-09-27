@@ -33,22 +33,22 @@
         android:orientation="horizontal"
         >
 
-        <Button
-            android:id="@+id/btnFirmar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:backgroundTint="#00BCD4"
-            android:text="Firmar"></Button>
+<!--        <Button-->
+<!--            android:id="@+id/btnFirmar"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight=".5"-->
+<!--            android:backgroundTint="#00BCD4"-->
+<!--            android:text="Firmar"></Button>-->
 
 
-        <Button
-            android:id="@+id/btnBorrar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:backgroundTint="#00BCD4"
-            android:text="Borrar"></Button>
+<!--        <Button-->
+<!--            android:id="@+id/btnBorrar"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight=".5"-->
+<!--            android:backgroundTint="#00BCD4"-->
+<!--            android:text="Borrar"></Button>-->
 
 
     </LinearLayout>

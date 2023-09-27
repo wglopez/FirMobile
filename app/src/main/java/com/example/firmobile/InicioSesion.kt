@@ -33,7 +33,7 @@ class InicioSesion : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
 
-        val rootView=inflater.inflate(R.layout.fragment_inicio_sesion, container, false )
+        val rootView=inflater.inflate(R.layout.fragment_inicio_sesion, container, false)
 
         cuilView= rootView.findViewById(R.id.CUIL)
         btnInicioSesion= rootView.findViewById(R.id.btnIniciarSesion)
@@ -82,7 +82,5 @@ class InicioSesion : Fragment(){
         // Si todas las verificaciones pasan, el CUIL es válido
         return true
     }
-
-
 
 }

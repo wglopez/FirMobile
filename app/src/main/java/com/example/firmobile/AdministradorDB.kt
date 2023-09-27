@@ -45,10 +45,11 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
     fun insertUser(cuil:String):Int{
-        val db = writableDatabase
-        val registro = ContentValues()
-        registro.put("CUIL", cuil)
-        return db.insert("Usuarios",null, registro).toInt()
+        return writableDatabase.use { db ->
+            val registro = ContentValues()
+            registro.put("CUIL", cuil)
+            db.insert("Usuarios", null, registro).toInt()
+        }
     }
 
     fun insertDocumento(name:String, direction: String, type:String, idUsuario: Int) {
@@ -78,10 +79,10 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
 
-    fun getAllDocuments(idUsuario: Int?): ArrayList<Documento> {
+    fun getAllDocuments(idUsuario: Int?): ArrayList<Documento>? {
         val db = writableDatabase
-        val cursor = db.rawQuery(" SELECT * FROM Documentos" + "WHERE usuario_id="+idUsuario, null)
-        val listaDocumentos= ArrayList<Documento>()
+        val cursor = db.rawQuery(" SELECT * FROM Documentos " + "WHERE usuario_id="+idUsuario, null)
+        var listaDocumentos= ArrayList<Documento>()
         var document: Documento
         var name: String
         var id: Int
@@ -102,12 +103,18 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 document.id=id
                 listaDocumentos.add(document)
             } while (cursor.moveToNext())
+            cursor.close()
+            db.close()
+            return listaDocumentos
         }
-        cursor.close()
-        db.close()
-        return listaDocumentos
+        else return null
+
     }
 
+    fun deleteUsers(){
+        val db = writableDatabase
+        db.execSQL("DELETE FROM Usuarios")
+    }
 
     fun getImage(type:String):Int{
         when(type){
@@ -119,8 +126,6 @@ class AdministradorDB(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
             else->return 0
         }
     }
-
-
 
 }
 

@@ -7,7 +7,6 @@ import androidx.fragment.app.commit
 
 class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
     val inicioSesion: InicioSesion = InicioSesion()
-    val listaDocumentos: ListaDocumentos=ListaDocumentos()
     var idUsuarioActual:Int=0
     val administradorDB=AdministradorDB(this)
 
@@ -31,10 +30,12 @@ class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
 
 
     override fun onBotonClick(cuil: String) {
-        idUsuarioActual=administradorDB.insertUser(cuil)
-        var datos=Bundle()
+        administradorDB.deleteUsers()
+        idUsuarioActual = administradorDB.insertUser(cuil)
+        val listaDocumentos=ListaDocumentos()
+        var datos = Bundle()
         datos.putInt("usuario_id", idUsuarioActual)
-        listaDocumentos.arguments=datos
+        listaDocumentos.arguments = datos // Configurar argumentos antes de reemplazar el fragmento
         replaceFragment(listaDocumentos)
 
     }

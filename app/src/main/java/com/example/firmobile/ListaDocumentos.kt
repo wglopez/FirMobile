@@ -42,7 +42,8 @@ class ListaDocumentos : Fragment() {
         val rootView= inflater.inflate(R.layout.fragment_lista_documentos, container, false)
         val idUsuario= arguments?.getInt("usuario_id")
         administradorDB=AdministradorDB(requireContext())
-        listaDocumentos= administradorDB.getAllDocuments(idUsuario)
+        listaDocumentos = administradorDB.getAllDocuments(idUsuario) ?: ArrayList()
+
 
         btnAgregar=rootView.findViewById(R.id.btnAgregar)
         btnCerrarSesion=rootView.findViewById(R.id.btnCerrarSesion)
@@ -95,7 +96,6 @@ class ListaDocumentos : Fragment() {
             else->return 0
         }
     }
-
 }
 
 

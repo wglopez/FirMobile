@@ -39,7 +39,5 @@ class AdapterDocumento(private val contexto: Context, private val listaDocumento
 
         return layout
 
-
     }
-
 }
