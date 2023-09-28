@@ -2,6 +2,7 @@ package com.example.firmobile
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.net.Uri
@@ -28,9 +29,17 @@ class ListaDocumentos : Fragment() {
     private var listaDocumentos = arrayListOf<Documento>()
     private lateinit var administradorDB:AdministradorDB
     private lateinit var adaptador:AdapterDocumento
+    private var listener: OnFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    interface OnFragmentInteractionListener {
+        fun replaceFragmentInicioSesion()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        }
     }
 
     @SuppressLint("MissingInflatedId")
@@ -57,6 +66,12 @@ class ListaDocumentos : Fragment() {
             fileIntent.setType("*/*")
             startActivityForResult(fileIntent, 10)
         }
+
+
+        btnCerrarSesion.setOnClickListener{
+            listener?.replaceFragmentInicioSesion()
+        }
+
 
         return rootView
     }

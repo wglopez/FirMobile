@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 
-class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
+class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener, ListaDocumentos.OnFragmentInteractionListener {
     val inicioSesion: InicioSesion = InicioSesion()
     var cuilUsuarioActual:String=""
     val administradorDB=AdministradorDB(this)
@@ -38,6 +38,13 @@ class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener {
         listaDocumentos.arguments = datos // Configurar argumentos antes de reemplazar el fragmento
         replaceFragment(listaDocumentos)
 
+    }
+
+    override fun replaceFragmentInicioSesion() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameContainer, inicioSesion)
+            .addToBackStack(null)
+            .commit()
     }
 
 }
