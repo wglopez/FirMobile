@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 
-class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener, ListaDocumentos.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), LoginInterface {
     val inicioSesion: InicioSesion = InicioSesion()
     var cuilUsuarioActual:String=""
     val administradorDB=AdministradorDB(this)
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener, Lis
     }
 
 
-    override fun onBotonClick(cuil: String) {
+    override fun onLoginButtonClicked(cuil: String) {
         cuilUsuarioActual=cuil
         administradorDB.insertUser(cuil)
         val listaDocumentos=ListaDocumentos()
@@ -37,14 +37,11 @@ class MainActivity : AppCompatActivity(), InicioSesion.OnBotonClickListener, Lis
         datos.putString("cuilUsuario", cuilUsuarioActual)
         listaDocumentos.arguments = datos // Configurar argumentos antes de reemplazar el fragmento
         replaceFragment(listaDocumentos)
-
     }
 
-    override fun replaceFragmentInicioSesion() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frameContainer, inicioSesion)
-            .addToBackStack(null)
-            .commit()
+    override fun onLogoutButtonClicked() {
+        replaceFragment(InicioSesion())
+
     }
 
 }

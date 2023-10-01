@@ -21,7 +21,7 @@ import java.io.File
  * Use the [ListaDocumentos.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListaDocumentos : Fragment() {
+class ListaDocumentos : Fragment(){
 
     private lateinit var listView: ListView
     private lateinit var btnAgregar:Button
@@ -29,16 +29,13 @@ class ListaDocumentos : Fragment() {
     private var listaDocumentos = arrayListOf<Documento>()
     private lateinit var administradorDB:AdministradorDB
     private lateinit var adaptador:AdapterDocumento
-    private var listener: OnFragmentInteractionListener? = null
+    private var loginInterface:LoginInterface?=null
 
-    interface OnFragmentInteractionListener {
-        fun replaceFragmentInicioSesion()
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
+        if (context is LoginInterface) {
+            loginInterface = context
         }
     }
 
@@ -50,17 +47,25 @@ class ListaDocumentos : Fragment() {
         // Inflate the layout for this fragment
         val rootView= inflater.inflate(R.layout.fragment_lista_documentos, container, false)
         val cuilUsuario= requireArguments().getString("cuilUsuario")
+
+
+        //Instanciamos la Base de Datos
         administradorDB=AdministradorDB(requireContext())
+
+        //Se cargan los documentos asociados al usuario actual
         listaDocumentos = administradorDB.getAllDocuments(cuilUsuario.toString()) ?: ArrayList()
 
-
+        //Se asocian elementos del View
         btnAgregar=rootView.findViewById(R.id.btnAgregar)
         btnCerrarSesion=rootView.findViewById(R.id.btnCerrarSesion)
         listView=rootView.findViewById(R.id.documentos)
+
+        //Se rellena el Listview
         adaptador = AdapterDocumento(requireContext(), listaDocumentos)
         listView.adapter = adaptador
 
 
+        //Funcion del boton Agregar
         btnAgregar.setOnClickListener{
             val fileIntent= Intent(ACTION_GET_CONTENT)
             fileIntent.setType("*/*")
@@ -68,14 +73,17 @@ class ListaDocumentos : Fragment() {
         }
 
 
+        //Funcion del boton
         btnCerrarSesion.setOnClickListener{
-            listener?.replaceFragmentInicioSesion()
+//            listener?.replaceFragmentInicioSesion()
+            loginInterface?.onLogoutButtonClicked()
         }
-
 
         return rootView
     }
 
+
+    //Es la funcion que se llama al cargar un archivo
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode ==10  && resultCode == Activity.RESULT_OK && data != null){
             val selectedFileUri: Uri? = data?.data
@@ -84,44 +92,31 @@ class ListaDocumentos : Fragment() {
             val fileName = file.name // Obtiene el nombre del archivo (sin la ruta)
             val fileExtension = fileName?.substringAfterLast(".").toString()
 
-            if(esValido(fileExtension)){
-                val image=getImage(fileExtension)
+            //Se consulta si el formato del archivo es valido
+            if(Utils().esArchivoValido(fileExtension)){
+
+                //Se obtiene la imagen con la que se debe mostrar en la aplicacion
+                val image=Utils().getImage(fileExtension)
+
+                //Se crea el objeto documento
                 val document=Documento(fileName, filePath.toString(), fileExtension,image)
 
+                //Se agrega el documento nuevo en la base de datos asociado al usuario actual
                 administradorDB.insertDocumento(document, arguments?.getString("cuilUsuario"))
 
+                //Se agrega el documento nuevo en la lista de documentos pendientes por firmar
                 listaDocumentos.add(document)
 
+                //Se actualiza el listview
                 adaptador.notifyDataSetChanged()
-
 
             }
         }
     }
 
-    fun esValido(type:String):Boolean{
-        return !(type!="pdf" && type!="odt" && type!="doc" && type!="docx")
-    }
-
-    fun getImage(type:String):Int{
-        when(type){
-            "pdf"->return R.drawable.pdf_icon
-            "odt"->return R.drawable.odt_icon
-            "doc"->return R.drawable.doc_icon
-            "docx"->return R.drawable.docx_icon
-
-            else->return 0
-        }
-    }
 }
 
 
-
-
-//        listaDocumentos.add(Documento("pruebaDoc.doc", "directorioPrueba/prueba.doc", "Doc", R.drawable.doc_icon));
-//        listaDocumentos.add(Documento("pruebaDocx.docx", "directorioPrueba/prueba.docx", "Docx", R.drawable.docx_icon))
-//        listaDocumentos.add(Documento("pruebaPDF.pdf", "directorioPrueba/prueba.pdf", "PDF", R.drawable.pdf_icon));
-//        listaDocumentos.add(Documento("pruebaODT.odt", "directorioPrueba/prueba.odt", "ODT", R.drawable.odt_icon))
 
 
 

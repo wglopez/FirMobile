@@ -13,20 +13,11 @@ import android.widget.Toast
 
 class InicioSesion : Fragment(){
 
-    interface OnBotonClickListener {
-        fun onBotonClick(data: String)
-    }
-
-    private var botonClickListener: OnBotonClickListener? = null
+    private var loginInterface:LoginInterface?=null
     private lateinit var cuilView: TextView
     private lateinit var btnInicioSesion: Button
     private var cuil:String=""
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,14 +26,18 @@ class InicioSesion : Fragment(){
 
         val rootView=inflater.inflate(R.layout.fragment_inicio_sesion, container, false)
 
+        //Se asocian elementos del View
         cuilView= rootView.findViewById(R.id.CUIL)
         btnInicioSesion= rootView.findViewById(R.id.btnIniciarSesion)
+
+
+        //Se definen las acciones del boton Iniciar Sesion
         btnInicioSesion.setOnClickListener{
             cuil = cuilView.text.toString()
 
-            if (esCUILValido(cuil)){
+            if (Utils().esCUILValido(cuil)){
 
-                botonClickListener?.onBotonClick(cuil)
+                loginInterface?.onLoginButtonClicked(cuil)
             }
             else{
                 Toast.makeText(activity, "CUIL Invalido", Toast.LENGTH_LONG).show()
@@ -53,34 +48,17 @@ class InicioSesion : Fragment(){
         return rootView
     }
 
+    //Se asocia la interfaz con el Contexto o la Actividad que tiene cargado el actual fragmento
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnBotonClickListener) {
-            botonClickListener = context
+        if (context is LoginInterface) {
+            loginInterface = context
         } else {
             throw ClassCastException("$context debe implementar OnBotonClickListener")
         }
     }
 
 
-    fun esCUILValido(cuil: String): Boolean {
-        // Verificar si el CUIL tiene 11 dígitos
-        if (cuil.length != 11)
-            return false
 
-        // Verificar si todos los caracteres son dígitos
-        if (!cuil.all { it.isDigit() })
-            return false
-
-        // Verificar la condición de sufijo
-        val sufijo = cuil.last().toString().toInt()
-        if (sufijo < 0 || sufijo > 9)
-            return false
-
-        // Realizar cualquier otra verificación necesaria, como el formato del prefijo y el número de documento
-
-        // Si todas las verificaciones pasan, el CUIL es válido
-        return true
-    }
 
 }
