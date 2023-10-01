@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 
-class MainActivity : AppCompatActivity(), LoginInterface {
+class MainActivity : AppCompatActivity(), SwitchFragment {
     val inicioSesion: InicioSesion = InicioSesion()
     var cuilUsuarioActual:String=""
     val administradorDB=AdministradorDB(this)
@@ -15,33 +15,17 @@ class MainActivity : AppCompatActivity(), LoginInterface {
         setContentView(R.layout.activity_main)
         replaceFragment(inicioSesion)
 
-        val CUIL= inicioSesion.arguments?.getInt("CUIL")
-
-
     }
 
-    fun replaceFragment(fragment: Fragment){
+    override fun replaceFragment(fragment: Fragment){
+
+        cuilUsuarioActual= fragment.arguments?.getString("cuilUsuario").toString()
+
         supportFragmentManager.commit {
             replace(R.id.frameContainer, fragment)
             setReorderingAllowed(true)
             addToBackStack("replacement")
         }
-    }
-
-
-    override fun onLoginButtonClicked(cuil: String) {
-        cuilUsuarioActual=cuil
-        administradorDB.insertUser(cuil)
-        val listaDocumentos=ListaDocumentos()
-        var datos = Bundle()
-        datos.putString("cuilUsuario", cuilUsuarioActual)
-        listaDocumentos.arguments = datos // Configurar argumentos antes de reemplazar el fragmento
-        replaceFragment(listaDocumentos)
-    }
-
-    override fun onLogoutButtonClicked() {
-        replaceFragment(InicioSesion())
-
     }
 
 }

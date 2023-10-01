@@ -7,12 +7,15 @@ import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
+import android.widget.ListAdapter
 import android.widget.ListView
+import androidx.fragment.app.Fragment
 import java.io.File
 
 
@@ -21,7 +24,7 @@ import java.io.File
  * Use the [ListaDocumentos.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListaDocumentos : Fragment(){
+class ListaDocumentos : Fragment(), AdapterView.OnItemClickListener{
 
     private lateinit var listView: ListView
     private lateinit var btnAgregar:Button
@@ -29,13 +32,13 @@ class ListaDocumentos : Fragment(){
     private var listaDocumentos = arrayListOf<Documento>()
     private lateinit var administradorDB:AdministradorDB
     private lateinit var adaptador:AdapterDocumento
-    private var loginInterface:LoginInterface?=null
+    private var switchFragment:SwitchFragment?=null
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is LoginInterface) {
-            loginInterface = context
+        if (context is SwitchFragment) {
+            switchFragment = context
         }
     }
 
@@ -63,6 +66,7 @@ class ListaDocumentos : Fragment(){
         //Se rellena el Listview
         adaptador = AdapterDocumento(requireContext(), listaDocumentos)
         listView.adapter = adaptador
+        listView.setOnItemClickListener(this)
 
 
         //Funcion del boton Agregar
@@ -75,8 +79,11 @@ class ListaDocumentos : Fragment(){
 
         //Funcion del boton
         btnCerrarSesion.setOnClickListener{
-//            listener?.replaceFragmentInicioSesion()
-            loginInterface?.onLogoutButtonClicked()
+            val inicioSesion=InicioSesion()
+            var datos = Bundle()
+            datos.putString("cuilUsuario", "")
+            inicioSesion.arguments = datos
+            switchFragment?.replaceFragment(inicioSesion)
         }
 
         return rootView
@@ -112,6 +119,20 @@ class ListaDocumentos : Fragment(){
 
             }
         }
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long){
+        val la: ListAdapter = parent?.getAdapter() as ListAdapter
+        val documento: Documento = la.getItem(position) as Documento
+        val detalleDocumento=DetalleDocumento()
+        var datos = Bundle()
+        datos.putString("nombre", documento.name)
+        datos.putString("tipo", documento.type)
+        datos.putString("direccion", documento.direction)
+        detalleDocumento.arguments = datos
+
+        switchFragment?.replaceFragment(detalleDocumento)
+
     }
 
 }
