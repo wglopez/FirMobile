@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 
 
 class InicioSesion : Fragment(){
@@ -36,13 +37,14 @@ class InicioSesion : Fragment(){
             cuil = cuilView.text.toString()
 
             if (Utils().esCUILValido(cuil)){
+                //Se instancia la base de datos
                 val administradorDB=AdministradorDB(requireContext())
+
+                //Se inserta el usuario en caso que no este
                 administradorDB.insertUser(cuil)
-                val listaDocumentos=ListaDocumentos()
-                var datos = Bundle()
-                datos.putString("cuilUsuario", cuil)
-                listaDocumentos.arguments = datos // Configurar argumentos antes de reemplazar el fragmento
-                switchFragment?.replaceFragment(listaDocumentos)
+
+                //Se llama a la interfaz para mostrar la lista de documentos asociados a ese usuario
+                switchFragment?.replaceFragment(Utils().fragmentListaDocumentos(cuil))
 
             }
             else{
@@ -65,6 +67,18 @@ class InicioSesion : Fragment(){
     }
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Aquí puedes manejar el botón de retroceso en el fragmento de detalle de documento
+                // Puedes realizar alguna acción o simplemente permitir que el evento siga su curso
+                // Si no necesitas hacer nada especial, puedes eliminar este método
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
 
 }

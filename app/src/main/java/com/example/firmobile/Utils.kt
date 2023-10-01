@@ -1,5 +1,7 @@
 package com.example.firmobile
 
+import android.os.Bundle
+
 class Utils {
 
     fun getImage(type:String):Int{
@@ -36,5 +38,22 @@ class Utils {
         return true
     }
 
+
+    fun fragmentInicioSesion():InicioSesion{
+        val inicioSesion=InicioSesion()
+        var datos = Bundle()
+        datos.putString("cuilUsuario", "")
+        inicioSesion.arguments = datos
+        return inicioSesion
+    }
+
+
+    fun fragmentListaDocumentos(cuil: String?):ListaDocumentos{
+        val listaDocumentos=ListaDocumentos()
+        var datos = Bundle()
+        datos.putString("cuilUsuario", cuil)
+        listaDocumentos.arguments = datos
+        return listaDocumentos
+    }
 
 }

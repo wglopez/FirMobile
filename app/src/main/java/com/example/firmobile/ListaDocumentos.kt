@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
 import android.widget.ListAdapter
 import android.widget.ListView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import java.io.File
 
@@ -24,7 +25,7 @@ import java.io.File
  * Use the [ListaDocumentos.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListaDocumentos : Fragment(), AdapterView.OnItemClickListener{
+class ListaDocumentos() : Fragment(), AdapterView.OnItemClickListener {
 
     private lateinit var listView: ListView
     private lateinit var btnAgregar:Button
@@ -55,6 +56,7 @@ class ListaDocumentos : Fragment(), AdapterView.OnItemClickListener{
         //Instanciamos la Base de Datos
         administradorDB=AdministradorDB(requireContext())
 
+
         //Se cargan los documentos asociados al usuario actual
         listaDocumentos = administradorDB.getAllDocuments(cuilUsuario.toString()) ?: ArrayList()
 
@@ -77,14 +79,11 @@ class ListaDocumentos : Fragment(), AdapterView.OnItemClickListener{
         }
 
 
-        //Funcion del boton
+        //Funcion del boton Cerrar sesion
         btnCerrarSesion.setOnClickListener{
-            val inicioSesion=InicioSesion()
-            var datos = Bundle()
-            datos.putString("cuilUsuario", "")
-            inicioSesion.arguments = datos
-            switchFragment?.replaceFragment(inicioSesion)
+            switchFragment?.replaceFragment(Utils().fragmentInicioSesion())
         }
+
 
         return rootView
     }
@@ -107,6 +106,7 @@ class ListaDocumentos : Fragment(), AdapterView.OnItemClickListener{
 
                 //Se crea el objeto documento
                 val document=Documento(fileName, filePath.toString(), fileExtension,image)
+                document.id=listaDocumentos.size
 
                 //Se agrega el documento nuevo en la base de datos asociado al usuario actual
                 administradorDB.insertDocumento(document, arguments?.getString("cuilUsuario"))
@@ -122,17 +122,43 @@ class ListaDocumentos : Fragment(), AdapterView.OnItemClickListener{
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long){
-        val la: ListAdapter = parent?.getAdapter() as ListAdapter
-        val documento: Documento = la.getItem(position) as Documento
+        val documento = adaptador.getItem(position) as Documento
         val detalleDocumento=DetalleDocumento()
         var datos = Bundle()
+        datos.putInt("id", documento.id)
         datos.putString("nombre", documento.name)
         datos.putString("tipo", documento.type)
         datos.putString("direccion", documento.direction)
+        datos.putInt("imagen", documento.image)
+        datos.putString("cuilUsuario", arguments?.getString("cuilUsuario"))
         detalleDocumento.arguments = datos
 
         switchFragment?.replaceFragment(detalleDocumento)
 
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Aquí puedes manejar el botón de retroceso en el fragmento de detalle de documento
+                // Puedes realizar alguna acción o simplemente permitir que el evento siga su curso
+                // Si no necesitas hacer nada especial, puedes eliminar este método
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+
+    fun onDocumentoBorrado() {
+        // Actualizar la lista de documentos después de borrar
+        listaDocumentos = administradorDB.getAllDocuments(arguments?.getString("cuilUsuario") ?: "") ?: ArrayList()
+        adaptador = AdapterDocumento(requireContext(), listaDocumentos)
+        adaptador.notifyDataSetChanged()
+        listView.adapter = adaptador
     }
 
 }

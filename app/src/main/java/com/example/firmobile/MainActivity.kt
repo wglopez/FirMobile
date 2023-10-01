@@ -8,12 +8,11 @@ import androidx.fragment.app.commit
 class MainActivity : AppCompatActivity(), SwitchFragment {
     val inicioSesion: InicioSesion = InicioSesion()
     var cuilUsuarioActual:String=""
-    val administradorDB=AdministradorDB(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        replaceFragment(inicioSesion)
+        replaceFragment(Utils().fragmentInicioSesion())
 
     }
 
@@ -21,11 +20,11 @@ class MainActivity : AppCompatActivity(), SwitchFragment {
 
         cuilUsuarioActual= fragment.arguments?.getString("cuilUsuario").toString()
 
-        supportFragmentManager.commit {
-            replace(R.id.frameContainer, fragment)
-            setReorderingAllowed(true)
-            addToBackStack("replacement")
-        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameContainer, fragment)
+            .addToBackStack(null)
+            .commit()
     }
+
 
 }
